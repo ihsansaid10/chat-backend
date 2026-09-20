@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat Room</title>
+
+  <!-- Font gratis dari Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- =========================================================
+       LAYAR 1: MAIN MENU
+       Dua tombol di tengah: Join Room & Create Room
+       ========================================================= -->
+  <main id="menuScreen" class="menu-screen">
+    <h1 class="logo">Chat Room</h1>
+    <p class="tagline">Bikin ruang ngobrol, lalu kirim kodenya ke teman.</p>
+
+    <div class="menu-buttons">
+      <button id="btnJoin" class="btn btn-primary">Join Room</button>
+      <button id="btnCreate" class="btn">Create Room</button>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       LAYAR 2: RUANG CHAT (awalnya disembunyikan dengan class "hidden")
+       ========================================================= -->
+  <section id="chatScreen" class="chat-screen hidden">
+
+    <header class="chat-header">
+      <div>
+        <h2 id="roomTitle"></h2>
+        <p class="meta">
+          <button id="btnCopyCode" class="code-chip" title="Klik untuk menyalin kode"></button>
+          <span id="onlineCount"></span>
+        </p>
+      </div>
+      <div class="header-actions">
+        <button id="btnDownload" class="btn btn-small">Download log</button>
+        <button id="btnLeave" class="btn btn-small btn-danger">Keluar</button>
+      </div>
+    </header>
+
+    <!-- Daftar pesan. Isinya dibuat oleh JavaScript -->
+    <ul id="messages" class="messages"></ul>
+
+    <!-- Panel emoji (isinya juga dibuat oleh JavaScript) -->
+    <div id="emojiPanel" class="emoji-panel hidden"></div>
+
+    <!-- Form kirim pesan -->
+    <form id="chatForm" class="chat-form" autocomplete="off">
+      <button type="button" id="btnEmoji" class="btn-icon" aria-label="Pilih emoji">😊</button>
+      <input id="messageInput" type="text" placeholder="Ketik pesan..." maxlength="500" required>
+      <button id="btnSend" type="submit" class="btn btn-primary btn-send">Kirim</button>
+    </form>
+  </section>
+
+  <!-- =========================================================
+       POPUP (MODAL)
+       Ada 3 popup. Semuanya awalnya "hidden".
+       ========================================================= -->
+
+  <!-- Popup 1: isi kode room (untuk Join Room) -->
+  <div id="modalCode" class="modal hidden">
+    <form id="formCode" class="modal-box">
+      <h3>Join Room</h3>
+      <label for="inputCode">Kode room</label>
+      <input id="inputCode" type="text" maxlength="5" placeholder="contoh: K7M2Q" autocomplete="off" required>
+      <p id="codeError" class="form-message" role="status"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-small" data-close>Batal</button>
+        <button id="btnCheckCode" type="submit" class="btn btn-primary btn-small">Cek kode</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Popup 2: bikin username (muncul setelah kode valid) -->
+  <div id="modalUsername" class="modal hidden">
+    <form id="formUsername" class="modal-box">
+      <h3>Pilih username</h3>
+      <label for="inputUsername">Username</label>
+      <input id="inputUsername" type="text" maxlength="20" placeholder="nama yang tampil di chat" autocomplete="off" required>
+      <p id="usernameError" class="form-message" role="status"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-small" data-close>Batal</button>
+        <button type="submit" class="btn btn-primary btn-small">Masuk room</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Popup 3: bikin room (Create Room) -->
+  <div id="modalCreate" class="modal hidden">
+    <form id="formCreate" class="modal-box">
+      <h3>Create Room</h3>
+      <label for="inputRoomName">Nama room</label>
+      <input id="inputRoomName" type="text" maxlength="30" placeholder="contoh: Nongkrong Malam" autocomplete="off" required>
+      <label for="inputHostName">Username kamu</label>
+      <input id="inputHostName" type="text" maxlength="20" placeholder="nama yang tampil di chat" autocomplete="off" required>
+      <p id="createError" class="form-message" role="status"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-small" data-close>Batal</button>
+        <button id="btnCreateSubmit" type="submit" class="btn btn-primary btn-small">Buat room</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Notifikasi kecil di bawah layar -->
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <!-- PeerJS: library gratis untuk koneksi antar browser (WebRTC), tanpa perlu server sendiri -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <!-- Script kita sendiri harus dimuat SETELAH PeerJS -->
+  <script src="script.js"></script>
+</body>
+</html>
